@@ -6,8 +6,8 @@
     "wordpress-php-fpm"
   ],
   "scripts": {
-    "build": "podman-compose --profile build build",
-    "start": "podman-compose --profile up up --force-recreate",
-    "stop": "podman-compose --profile down down"
+    "build": "docker compose --profile build build",
+    "start": "docker compose --profile up up --force-recreate",
+    "stop": "docker compose --profile up down"
   }
 }

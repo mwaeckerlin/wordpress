@@ -5,11 +5,11 @@ services:
     extends:
       file: ./wordpress-nginx/docker-compose.yml
       service: wordpress-nginx
+    environment:
+      PHP_FPM_HOST: wordpress-php-fpm
     profiles:
       - build
       - up
-    depends_on:
-      - wordpress-php-fpm
 
   wordpress-php-fpm:
     extends:
@@ -18,11 +18,9 @@ services:
     profiles:
       - build
       - up
-    depends_on:
-      - mysql
 
   mysql:
-    image: mariadb:11
+    image: mariadb
     environment:
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wordpress
