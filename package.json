@@ -1,0 +1,13 @@
+{
+  "name": "wordpress-monorepo",
+  "private": true,
+  "workspaces": [
+    "wordpress-nginx",
+    "wordpress-php-fpm"
+  ],
+  "scripts": {
+    "build": "podman-compose --profile build build",
+    "start": "podman-compose --profile up up --force-recreate",
+    "stop": "podman-compose --profile down down"
+  }
+}

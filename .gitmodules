@@ -1,0 +1,6 @@
+[submodule "wordpress-nginx"]
+	path = wordpress-nginx
+	url = git@github.com:mwaeckerlin/wordpress-nginx.git
+[submodule "wordpress-php-fpm"]
+	path = wordpress-php-fpm
+	url = git@github.com:mwaeckerlin/wordpress-php-fpm.git
