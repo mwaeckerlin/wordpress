@@ -20,7 +20,7 @@ Compared to the official [wordpress], this package has:
  - Less attack surface.
  - Better encapsulation.
  - Running as non priviledged user.
- - Much smaller: ~86 MB (nginx) + ~116 MB (php-fpm) vs. ~735 MB for the aache based stock image.
+ - Much smaller: ~86MB (nginx) + ~116MB (php-fpm) vs. ~727MBMB for the official fpm based image.
  - Clear segmentation: only NGINX can reach PHP, only PHP can reach the DB; networks are isolated and marked `encrypted` (e.g. when run in Docker Swarm)..
  - Headless: no shell, no package manager at runtime.
  - Configurable via environment (NGINX through envwrap templates, WordPress via `wp-config.php`).
@@ -74,7 +74,7 @@ We will have the following network setup:
 
 ```mermaid
 flowchart LR
-    browser["Browser\nhttp://localhost:8123"]
+    browser["Browser<br/>http://localhost:8123"]
     nginx["wordpress-nginx"]
     php["wordpress-php-fpm"]
     db["wordpress-db"]
