@@ -67,13 +67,10 @@ Mount `/app/wp-secrets` to **wordpress-php-fpm** to keep sessions up between pro
       `WORDPRESS_LOGGED_IN_SALT`\
       `WORDPRESS_NONCE_SALT`: cryptographic salts/keys for cookies/sessions; **must be set to strong unique secrets**, they all default to strong random values
 
-Helper, FYI:
-- `ALLOW_USER` is provided by `mwaeckerlin/very-base` and resolves to the proper chown command for the runtime user.
-
 
 ## Docker Compose Setup
 
-We will have the following network setup (Mermaid flowchart):
+We will have the following network setup:
 
 ```mermaid
 flowchart LR
@@ -182,7 +179,7 @@ Service Roles:
 - [mwaeckerlin/wordpress-nginx]: HTTP endpoint; forwards PHP to [mwaeckerlin/wordpress-php-fpm] via `PHP_FPM_HOST`/`PHP_FPM_PORT`.
 - [mwaeckerlin/wordpress-php-fpm]: runs WordPress/PHP-FPM; reads DB settings from `WORDPRESS_DB_*`; writes to `/app/wp-content`.
 - `mysql`: database reachable only from PHP.
-- `wp-access-fix`: one-time chown on the shared volume using `ALLOW_USER` from `very-base`.
+- `wp-access-fix`: one-time chown on the shared volume. FYI: `${ALLOW_USER}` is provided by `mwaeckerlin/very-base` and resolves to the proper chown command to give access to the runtime user.
 
 
 ## Network Topology
