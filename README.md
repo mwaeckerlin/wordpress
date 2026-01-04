@@ -26,6 +26,7 @@ Compared to the official [wordpress], this package has:
  - Headless: no shell, no package manager at runtime.
  - Configurable via environment (NGINX through envwrap templates, WordPress via `wp-config.php`).
  - Configuration `wp-config.php` and secrets `wp-secrets/wp-secrets.php` not available in NGINX frontend.
+ - No Wordpress PHP file available in NGINX frontend, all files emptied.
 
 
 ## Volumes / Persistence
@@ -129,6 +130,7 @@ services:
     image: mwaeckerlin/wordpress-php-fpm
     environment:
       WORDPRESS_DB_PASSWORD: ThisIsMandaToryToBeSet
+      WORDPRESS_DB_HOST: wordpress-db
     volumes:
       - wp-content:/app/wp-content
       - wp-secrets:/app/wp-secrets
@@ -151,13 +153,7 @@ services:
       - db-network
 
   wp-access-fix:
-    image: mwaeckerlin/very-base:latest
-    command:
-      - /bin/sh
-      - -c
-      - |
-        $${ALLOW_USER} /app
-        sleep infinity
+    image: mwaeckerlin/allow-write-access
     volumes:
       - wp-content:/app/wp-content
       - wp-secrets:/app/wp-secrets

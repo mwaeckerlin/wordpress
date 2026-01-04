@@ -43,24 +43,19 @@ services:
     networks:
       - db-network
 
-  wp-content-fix:
-    image: mwaeckerlin/very-base
-    command:
-      - /bin/sh
-      - -c
-      - |
-        $${ALLOW_USER} /app
-        sleep infinity
+  wp-access-fix:
+    image: mwaeckerlin/allow-write-access
     volumes:
       - wp-content:/app/wp-content
       - wp-secrets:/app/wp-secrets
     profiles:
       - up
-    
+
 volumes:
   db-data:
   wp-secrets:
   wp-content:
+
 
 networks:
   php-network:
