@@ -2,7 +2,7 @@
 
 Lean, hardened WordPress stack as a monorepo with two submodules:
 
-- [mwaeckerlin/wordpress-nginx]: NGINX WordPress frontend in only 86MB
+- [mwaeckerlin/wordpress-nginx]: NGINX WordPress frontend in only 66MB
 - [mwaeckerlin/wordpress-php-fpm]: PHP‑FPM WordPress backend in only 116MB
 
 This splitting is in accordance to Docker philosophy of having only one server process per image and to NGINX which splits PHP processing into a separate service. It therefore also follows strong microservice architecture. 
@@ -13,6 +13,7 @@ Both together are the most lean and secure images for Wordpress:
  - small attack surface
  - starts as non root user
  - configurations and secrets hidden in the second layer service
+ - all PHP files are empty, since they are not needed in NGINX
 
 86MB is mostly the size of the WordPress distribution itself, and stored in both images.
 
@@ -20,8 +21,8 @@ Compared to the official [wordpress], this package has:
  - Less attack surface.
  - Better encapsulation.
  - Running as non priviledged user.
- - Much smaller: ~86MB (nginx) + ~116MB (php-fpm) vs. ~727MBMB for the official fpm based image.
- - Clear segmentation: only NGINX can reach PHP, only PHP can reach the DB; networks are isolated and marked `encrypted` (e.g. when run in Docker Swarm)..
+ - Much smaller: ~66MB (nginx) + ~116MB (php-fpm) vs. ~727MBMB for the official fpm based image.
+ - Clear segmentation: only NGINX can reach PHP, only PHP can reach the DB; networks are isolated and marked `encrypted` (e.g. when run in Docker Swarm)
  - Headless: no shell, no package manager at runtime.
  - Configurable via environment (NGINX through envwrap templates, WordPress via `wp-config.php`).
  - Configuration `wp-config.php` and secrets `wp-secrets/wp-secrets.php` not available in NGINX frontend.
