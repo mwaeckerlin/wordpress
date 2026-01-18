@@ -58,7 +58,13 @@ Mount `/app/wp-secrets` to **wordpress-php-fpm** to keep sessions up between pro
     - `WORDPRESS_TABLE_PREFIX`: table prefix; default `wp_`, change if you want a custom prefix.
     - `WORDPRESS_DB_CHARSET`: default `utf8mb4`, typically keep.
     - `WORDPRESS_DB_COLLATE`: default empty (WordPress picks a sensible collate), typically keep.
-    - `WORDPRESS_DEBUG`: `false` by default; enable only for debugging.
+    - `WORDPRESS_DEBUG`: Simple debug control (default: `false`).
+      - `false`/empty/`0`: Debug completely off.
+      - `true`/`on`/`yes`/`1`: Debug on, no log, no display.
+      - `log`: Debug on, writes errors to `wp-content/debug.log` (recommended for analysis).
+      - `display`: Debug on, shows errors directly in the browser (development only).
+      - `all`: Debug on, log and display enabled (short‑term deep diagnostics).
+    - `WORDPRESS_DEBUG_LOG`: Optional log file path (e.g. `wp-content/logs/debug.log`); used when debug mode is `log` or `all`.
   - Salt and Session Secrets: persisted at first run (only evaluated at the very first start)
     - `WORDPRESS_AUTH_KEY`\
       `WORDPRESS_SECURE_AUTH_KEY`\
@@ -211,3 +217,43 @@ After `npm start` you may connect to wordpress at: http://localhost:8123
 [mwaeckerlin/nginx]: https://github.com/mwaeckerlin/nginx "NGINX Service Base Image"
 [mwaeckerlin/php-fpm]: https://github.com/mwaeckerlin/php-fpm "PHP-FPM Service Base Image"
 [wordpress]: https://hub.docker.com/_/wordpress "the official wordpress docker image"
+
+## Debugging
+
+Control WordPress debugging via `WORDPRESS_DEBUG` without touching code:
+
+- What is "log"? Writes errors to `wp-content/debug.log` inside the WordPress folder. No UI impact; ideal for production analysis.
+- What is "display"? Shows errors directly in the browser (HTML). Great for development; avoid in production.
+- Custom log path: set `WORDPRESS_DEBUG_LOG=wp-content/logs/debug.log` (or an absolute path) when using `log`/`all`.
+
+Typical setups:
+
+- Production: `WORDPRESS_DEBUG=false`
+- Analysis without impacting UI: `WORDPRESS_DEBUG=log`
+- Local development: `WORDPRESS_DEBUG=display`
+- Short‑term deep diagnostics: `WORDPRESS_DEBUG=all`
+
+Docker Compose example:
+
+```yaml
+services:
+  wordpress-php-fpm:
+    image: mwaeckerlin/wordpress-php-fpm
+    environment:
+      WORDPRESS_DB_PASSWORD: <secret>
+      WORDPRESS_DB_HOST: wordpress-db
+      WORDPRESS_DEBUG: log
+      WORDPRESS_DEBUG_LOG: wp-content/logs/debug.log
+    volumes:
+      - wp-content:/app/wp-content
+      - wp-secrets:/app/wp-secrets
+```
+
+Quick checks:
+
+```bash
+# View the log when WORDPRESS_DEBUG=log|all
+docker exec -it wordpress-php-fpm sh -lc 'tail -n 200 /app/wp-content/debug.log'
+
+# For display mode, open the site or admin; errors appear in the HTML
+```

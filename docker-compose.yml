@@ -7,9 +7,6 @@ services:
       PHP_FPM_HOST: wordpress-php-fpm
     volumes:
       - wp-content:/app/wp-content
-    profiles:
-      - build
-      - up
     networks:
       - php-network
 
@@ -19,12 +16,10 @@ services:
       service: wordpress-php-fpm
     environment:
       WORDPRESS_DB_HOST: wordpress-db
+      WORDPRESS_DEBUG: all
     volumes:
       - wp-content:/app/wp-content
       - wp-secrets:/app/wp-secrets
-    profiles:
-      - build
-      - up
     networks:
       - php-network
       - db-network
@@ -38,8 +33,6 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: yes
     volumes:
       - db-data:/var/lib/mysql
-    profiles:
-      - up
     networks:
       - db-network
 
@@ -48,8 +41,6 @@ services:
     volumes:
       - wp-content:/app/wp-content
       - wp-secrets:/app/wp-secrets
-    profiles:
-      - up
 
 volumes:
   db-data:
