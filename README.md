@@ -53,9 +53,10 @@ Mount `/app/wp-secrets` to **wordpress-php-fpm** to keep sessions up between pro
     - `WORDPRESS_DB_NAME`: DB name; defaults to `wordpress`, change if your schema differs.
     - `WORDPRESS_DB_HOST`: DB host; defaults to `mysql`, set to your DB host it it's named differently.
     - `WORDPRESS_DB_PORT`: DB port; defaults to `3306`, fits mysql and mariadb, adjust if your DB listens elsewhere. if your DB listens elsewhere.
-    - `WORDPRESS_HOME`: Base URL of the wordpress home.
-    - `WORDPRESS_SITEURL`: Base URL of the wordpress site.
+    - `WORDPRESS_HOME`: Base URL of the wordpress home (optional).
+    - `WORDPRESS_SITEURL`: Base URL of the wordpress site (optional).
     - `WORDPRESS_TABLE_PREFIX`: table prefix; default `wp_`, change if you want a custom prefix.
+    - `NGINX_HOST`: Internal hostname:port for container-to-container requests (optional, default: `wordpress-nginx:8080`).
     - `WORDPRESS_DB_CHARSET`: default `utf8mb4`, typically keep.
     - `WORDPRESS_DB_COLLATE`: default empty (WordPress picks a sensible collate), typically keep.
     - `WORDPRESS_DEBUG`: Simple debug control (default: `false`).
@@ -199,11 +200,11 @@ In the best setup, there are internally two completely separated distinct networ
 The images are available directly from Docker Hub, there is no need to build. But if you want to build them:
 
 1) After `git clone`, init and update the submodules: `git submodule update --init --remote --recursive`
-2) Build the images: `npm run build`, this runs: `docker compose --profile build build`
-3) Start the whole setup: `npm start`, this runs: `docker compose --profile up up`
-4) Stop and tear down all containers: `npm run stop`, this runs: `docker compose --profile up down`  
+2) Build the images: `docker compose build`
+3) Start the whole setup: `docker compose up`
+4) Stop and tear down all containers: `docker compose down`  
 
-After `npm start` you may connect to wordpress at: http://localhost:8123
+After `docker compose up` you may connect to wordpress at: http://localhost:8123
 
 
 ## Notes on Submodules
@@ -242,8 +243,7 @@ services:
     environment:
       WORDPRESS_DB_PASSWORD: <secret>
       WORDPRESS_DB_HOST: wordpress-db
-      WORDPRESS_DEBUG: log
-      WORDPRESS_DEBUG_LOG: wp-content/logs/debug.log
+      WORDPRESS_DEBUG_LOG: wp-content/debug.log
     volumes:
       - wp-content:/app/wp-content
       - wp-secrets:/app/wp-secrets

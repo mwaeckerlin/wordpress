@@ -6,8 +6,8 @@
     "wordpress-php-fpm"
   ],
   "scripts": {
-    "build": "docker compose --profile build build",
-    "start": "docker compose --profile up up --force-recreate",
-    "stop": "docker compose --profile up down"
+    "build": "docker compose build",
+    "start": "docker compose up --force-recreate --remove-orphans --build",
+    "stop": "docker compose down"
   }
 }
