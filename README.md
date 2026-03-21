@@ -209,8 +209,8 @@ After `docker compose up` you may connect to wordpress at: http://localhost:8123
 
 ## Notes on Submodules
 
-- [mwaeckerlin/wordpress-nginx]: serves `/app` via NGINX, uses envwrap to inject `${PHP_FPM_HOST}`/`${PHP_FPM_PORT}` from ENV into NGINX config. See `wordpress-nginx/README.md`.
-- [mwaeckerlin/wordpress-php-fpm]: delivers WordPress, expects DB params from ENV (defaults in the Dockerfile) and writes to `/app/wp-content`. See `wordpress-php-fpm/README.md`.
+- [mwaeckerlin/wordpress-nginx]: serves `/app` via NGINX, uses envwrap to inject `${PHP_FPM_HOST}`/`${PHP_FPM_PORT}` from ENV into NGINX config. See `nginx/README.md`.
+- [mwaeckerlin/wordpress-php-fpm]: delivers WordPress, expects DB params from ENV (defaults in the Dockerfile) and writes to `/app/wp-content`. See `php-fpm/README.md`.
 - [mwaeckerlin/nginx] / mwaeckerlin/php-fpm] base: describe the headless base images and ENV configuration; see their READMEs.
 
 [mwaeckerlin/wordpress-nginx]: https://github.com/mwaeckerlin/wordpress-nginx "NGINX Service for WordPress"

@@ -1,9 +1,9 @@
 {
-  "name": "wordpress-monorepo",
+  "name": "@mwaeckerlin/wordpress",
   "private": true,
   "workspaces": [
-    "wordpress-nginx",
-    "wordpress-php-fpm"
+    "nginx",
+    "php-fpm"
   ],
   "scripts": {
     "build": "docker compose build",

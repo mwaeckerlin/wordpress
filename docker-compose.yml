@@ -1,7 +1,7 @@
 services:
   wordpress-nginx:
     extends:
-      file: ./wordpress-nginx/docker-compose.yml
+      file: ./nginx/docker-compose.yml
       service: wordpress-nginx
     environment:
       PHP_FPM_HOST: wordpress-php-fpm
@@ -12,7 +12,7 @@ services:
 
   wordpress-php-fpm:
     extends:
-      file: ./wordpress-php-fpm/docker-compose.yml
+      file: ./php-fpm/docker-compose.yml
       service: wordpress-php-fpm
     environment:
       WORDPRESS_DB_HOST: wordpress-db
