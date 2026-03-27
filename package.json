@@ -8,6 +8,7 @@
   "scripts": {
     "build": "docker compose build",
     "start": "docker compose up -d --force-recreate --remove-orphans --build",
+    "start:dev": "docker compose up --force-recreate --remove-orphans --build",
     "stop": "docker compose down"
   }
 }
