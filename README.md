@@ -200,11 +200,11 @@ In the best setup, there are internally two completely separated distinct networ
 The images are available directly from Docker Hub, there is no need to build. But if you want to build them:
 
 1) After `git clone`, init and update the submodules: `git submodule update --init --remote --recursive`
-2) Build the images: `docker compose build`
-3) Start the whole setup: `docker compose up`
-4) Stop and tear down all containers: `docker compose down`  
+2) Build the images: `npm run build`
+3) Start the whole setup (foreground): `npm start` or (background): `npm run start:daemon`
+4) Stop and tear down all containers: `npm stop`
 
-After `docker compose up` you may connect to wordpress at: http://localhost:8123
+After `npm start` (or `npm run start:daemon`) you may connect to wordpress at: http://localhost:8123
 
 
 ## Notes on Submodules

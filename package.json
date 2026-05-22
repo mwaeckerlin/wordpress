@@ -1,13 +1,13 @@
 {
   "name": "@mwaeckerlin/wordpress",
-  "private": true,
   "workspaces": [
     "nginx",
     "php-fpm"
   ],
   "scripts": {
     "build": "docker compose build",
-    "start": "docker compose up -d --force-recreate --remove-orphans --build",
+    "start": "docker compose up --force-recreate --remove-orphans --build",
+    "start:daemon": "docker compose up -d --force-recreate --remove-orphans --build",
     "start:dev": "docker compose up --force-recreate --remove-orphans --build",
     "stop": "docker compose down"
   }
