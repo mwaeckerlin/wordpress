@@ -9,6 +9,8 @@
     "start": "docker compose up --force-recreate --remove-orphans --build",
     "start:daemon": "docker compose up -d --force-recreate --remove-orphans --build",
     "start:dev": "docker compose up --force-recreate --remove-orphans --build",
-    "stop": "docker compose down"
+    "stop": "docker compose down",
+    "test": "npm run test:image",
+    "test:image": "npm run build --workspaces --if-present && bash tests/image-contract.sh mwaeckerlin/wordpress-nginx mwaeckerlin/wordpress-php-fpm"
   }
 }
