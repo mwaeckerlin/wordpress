@@ -61,11 +61,9 @@ Mount `/app/wp-secrets` to **wordpress-php-fpm** to keep sessions up between pro
     - `WORDPRESS_DB_COLLATE`: default empty (WordPress picks a sensible collate), typically keep.
     - `WORDPRESS_DEBUG`: Simple debug control (default: `false`).
       - `false`/empty/`0`: Debug completely off.
-      - `true`/`on`/`yes`/`1`: Debug on, no log, no display.
+      - `true`/`on`/`yes`/`1`: Debug on, errors go to the container log (stderr).
       - `log`: Debug on, writes errors to `wp-content/debug.log` (recommended for analysis).
-      - `display`: Debug on, shows errors directly in the browser (development only).
-      - `all`: Debug on, log and display enabled (short‑term deep diagnostics).
-    - `WORDPRESS_DEBUG_LOG`: Optional log file path (e.g. `wp-content/logs/debug.log`); used when debug mode is `log` or `all`.
+    - `WORDPRESS_DEBUG_LOG`: Optional log file path (e.g. `wp-content/logs/debug.log`); used when debug mode is `log`.
   - Salt and Session Secrets: persisted at first run (only evaluated at the very first start)
     - `WORDPRESS_AUTH_KEY`\
       `WORDPRESS_SECURE_AUTH_KEY`\
@@ -224,15 +222,14 @@ After `npm start` (or `npm run start:daemon`) you may connect to wordpress at: h
 Control WordPress debugging via `WORDPRESS_DEBUG` without touching code:
 
 - What is "log"? Writes errors to `wp-content/debug.log` inside the WordPress folder. No UI impact; ideal for production analysis.
-- What is "display"? Shows errors directly in the browser (HTML). Great for development; avoid in production.
-- Custom log path: set `WORDPRESS_DEBUG_LOG=wp-content/logs/debug.log` (or an absolute path) when using `log`/`all`.
+- Errors are never shown in the browser: the php-fpm base forces `display_errors` off, so debug output only ever goes to a log (the container log or the WP debug log).
+- Custom log path: set `WORDPRESS_DEBUG_LOG=wp-content/logs/debug.log` (or an absolute path) when using `log`.
 
 Typical setups:
 
 - Production: `WORDPRESS_DEBUG=false`
+- Errors to the container log: `WORDPRESS_DEBUG=true`
 - Analysis without impacting UI: `WORDPRESS_DEBUG=log`
-- Local development: `WORDPRESS_DEBUG=display`
-- Short‑term deep diagnostics: `WORDPRESS_DEBUG=all`
 
 Docker Compose example:
 
@@ -252,8 +249,6 @@ services:
 Quick checks:
 
 ```bash
-# View the log when WORDPRESS_DEBUG=log|all
+# View the log when WORDPRESS_DEBUG=log
 docker exec -it wordpress-php-fpm sh -lc 'tail -n 200 /app/wp-content/debug.log'
-
-# For display mode, open the site or admin; errors appear in the HTML
 ```
