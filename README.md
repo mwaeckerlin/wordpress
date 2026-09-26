@@ -37,22 +37,22 @@ To keep plugins/themes/uploads and to let both containers see the same files, mo
 
 Mount `/app/wp-secrets` to **wordpress-php-fpm** to keep sessions up between process restarts (or when scaling up replicas).
 
-**Permissions** on the volume: the runtime user comes from the base images and is not root. When the volume is created, the helper service `wp-access-fix` (based on `mwaeckerlin/very-base`) runs `ALLOW_USER` once on `/app/wp-content`; after that you can stop it and the volume keeps its owner.
+The runtime user of both images comes from the base images and is not root. When the volume is created, the helper service `wp-access-fix` (based on `mwaeckerlin/very-base`) runs `ALLOW_USER` once on `/app/wp-content`; after that you can stop it and the volume keeps its owner.
 
 
 ## Environment Variables
 
 - wordpress-nginx
-  - `PHP_FPM_HOST` (default mwaeckerlin/php-fpm]): upstream host for FastCGI.
+  - `PHP_FPM_HOST` (default `php-fpm`): upstream host for FastCGI.
   - `PHP_FPM_PORT` (default `9000`): upstream port.
 - wordpress-php-fpm
   - mandatory to change
-    - `WORDPRESS_DB_PASSWORD`: DB user password; **change in production** to a strong secret matching your DB.
+    - `WORDPRESS_DB_PASSWORD`: DB user password, a strong secret matching your DB. It has no default: without it the database connection fails at once.
   - optional to change
     - `WORDPRESS_DB_USER`: DB user; defaults to `wordpress`, change if you use another user.
     - `WORDPRESS_DB_NAME`: DB name; defaults to `wordpress`, change if your schema differs.
-    - `WORDPRESS_DB_HOST`: DB host; defaults to `mysql`, set to your DB host it it's named differently.
-    - `WORDPRESS_DB_PORT`: DB port; defaults to `3306`, fits mysql and mariadb, adjust if your DB listens elsewhere. if your DB listens elsewhere.
+    - `WORDPRESS_DB_HOST`: DB host; defaults to `mysql`, set to your DB host if it is named differently.
+    - `WORDPRESS_DB_PORT`: DB port; defaults to `3306`, fits mysql and mariadb, adjust if your DB listens elsewhere.
     - `WORDPRESS_HOME`: Base URL of the wordpress home (optional).
     - `WORDPRESS_SITEURL`: Base URL of the wordpress site (optional).
     - `WORDPRESS_TABLE_PREFIX`: table prefix; default `wp_`, change if you want a custom prefix.
@@ -65,14 +65,7 @@ Mount `/app/wp-secrets` to **wordpress-php-fpm** to keep sessions up between pro
       - `log`: Debug on, writes errors to `wp-content/debug.log` (recommended for analysis).
     - `WORDPRESS_DEBUG_LOG`: Optional log file path (e.g. `wp-content/logs/debug.log`); used when debug mode is `log`.
   - Salt and Session Secrets: persisted at first run (only evaluated at the very first start)
-    - `WORDPRESS_AUTH_KEY`\
-      `WORDPRESS_SECURE_AUTH_KEY`\
-      `WORDPRESS_LOGGED_IN_KEY`\
-      `WORDPRESS_NONCE_KEY`\
-      `WORDPRESS_AUTH_SALT`\
-      `WORDPRESS_SECURE_AUTH_SALT`\
-      `WORDPRESS_LOGGED_IN_SALT`\
-      `WORDPRESS_NONCE_SALT`: cryptographic salts/keys for cookies/sessions; **must be set to strong unique secrets**, they all default to strong random values
+    - `WORDPRESS_AUTH_KEY`, `WORDPRESS_SECURE_AUTH_KEY`, `WORDPRESS_LOGGED_IN_KEY`, `WORDPRESS_NONCE_KEY`, `WORDPRESS_AUTH_SALT`, `WORDPRESS_SECURE_AUTH_SALT`, `WORDPRESS_LOGGED_IN_SALT`, `WORDPRESS_NONCE_SALT`: cryptographic keys and salts that sign the login cookies. Unset, they are generated at random on the first start and kept in `/app/wp-secrets`; set them only to bring your own unique secrets.
 
 
 ## Docker Compose Setup
@@ -197,10 +190,10 @@ In the best setup, there are internally two completely separated distinct networ
 
 The images are available directly from Docker Hub, there is no need to build. But if you want to build them:
 
-1) After `git clone`, init and update the submodules: `git submodule update --init --remote --recursive`
-2) Build the images: `npm run build`
-3) Start the whole setup (foreground): `npm start` or (background): `npm run start:daemon`
-4) Stop and tear down all containers: `npm stop`
+1. After `git clone`, init and update the submodules: `git submodule update --init --remote --recursive`
+2. Build the images: `npm run build`
+3. Start the whole setup (foreground): `npm start` or (background): `npm run start:daemon`
+4. Stop and tear down all containers: `npm stop`
 
 After `npm start` (or `npm run start:daemon`) you may connect to wordpress at: http://localhost:8123
 

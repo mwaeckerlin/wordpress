@@ -16,6 +16,8 @@ services:
       service: wordpress-php-fpm
     environment:
       WORDPRESS_DB_HOST: wordpress-db
+      # the local development database below; the image has no default
+      WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DEBUG: all
     volumes:
       - wp-content:/app/wp-content
